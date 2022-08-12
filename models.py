@@ -31,13 +31,13 @@ logging.config.dictConfig(config['logger'])
 logger = logging.getLogger('server')
 
 try:
-    red = redis.Redis(host=config['redis_host'], port=config['redis_port'], db=0)
+    # red = redis.Redis(host=config['redis_host'], port=config['redis_port'], db=0)
     engine = create_engine(config['db_connection'])
     # session = Session(bind=engine)
     engine.connect()
     session_factory = sessionmaker(bind=engine)
     session = scoped_session(session_factory)
-    red.ping()
+    # red.ping()
 except Exception as e:
     print(e)
 except redis.ConnectionError as e:
@@ -80,23 +80,23 @@ def object_exists(p):
         raise NotFoundError
 
 
-def is_login(func):
-    u""" Функция-декоратор проверки аутентификации пользователя
-         принимает необходимую функцию, возвращает функцию, если аутентификация успешна """
-    @wraps(func)
-    def checking(client_data):
-        try:
-            token = 'token_' + client_data['token']
-            id = red.get(token).decode()
-            if red.ttl(name=token) < 30:
-                red.expire(client_data['token'], 60)
-            return func(client_data, id)
-        except:
-            del client_data['token']
-            client_data['data'] = {}
-            raise UnauthorizedError
-    # print(checking)
-    return checking
+# def is_login(func):
+#     u""" Функция-декоратор проверки аутентификации пользователя
+#          принимает необходимую функцию, возвращает функцию, если аутентификация успешна """
+#     @wraps(func)
+#     def checking(client_data):
+#         try:
+#             token = 'token_' + client_data['token']
+#             id = red.get(token).decode()
+#             if red.ttl(name=token) < 30:
+#                 red.expire(client_data['token'], 60)
+#             return func(client_data, id)
+#         except:
+#             del client_data['token']
+#             client_data['data'] = {}
+#             raise UnauthorizedError
+#     # print(checking)
+#     return checking
 
 
 #################################################
@@ -142,7 +142,7 @@ class People(Base):
         # p.token = binascii.hexlify(os.urandom(20)).decode()
         p.token = '123456789'
         client_data['token'] = p.token
-        red.set('token_' + p.token, p.id, ex=60)
+        # red.set('token_' + p.token, p.id, ex=60)
         del client_data['data']['password']
         del client_data['data']['email']
         client_data['data']['full_name'] = p.full_name
@@ -167,7 +167,7 @@ class People(Base):
             session.add(p)
             session.commit()
             client_data['data'] = {}
-            red.set('token_' + p.token, p.id, ex=60)
+            # red.set('token_' + p.token, p.id, ex=60)
             client_data['token'] = p.token
             client_data['data']['full_name'] = p.full_name
         except:
