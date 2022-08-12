@@ -25,6 +25,11 @@ with open('settings') as conf:
 
 app = Flask(__name__)
 
+@app.route('/')
+@app.route('/index')
+def index():
+    return "Hello, World!"
+
 Base = declarative_base()
 
 logging.config.dictConfig(config['logger'])
