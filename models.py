@@ -29,7 +29,7 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    return "Hello, Ivan Vasilevich!" + datetime.now()
+    return "Hello, Ivan Vasilevich!" + str(datetime.now())
 
 Base = declarative_base()
 
