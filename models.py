@@ -25,10 +25,11 @@ with open('settings') as conf:
 
 app = Flask(__name__)
 
+
 @app.route('/')
 @app.route('/index')
 def index():
-    return "Hello, Ivan Vasilevich!"
+    return "Hello, Ivan Vasilevich!" + datetime.now()
 
 Base = declarative_base()
 
@@ -417,4 +418,7 @@ class Favourites(Base):
 # Base.metadata.create_all(engine)
 
 
-app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)), debug=True)
+def Flask_run():
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)), debug=True)
+
+
