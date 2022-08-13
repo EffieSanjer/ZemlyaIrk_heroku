@@ -417,4 +417,4 @@ class Favourites(Base):
 # Base.metadata.create_all(engine)
 
 
-app.run(address=config['address'], port=config['port'], debug=True)
+app.run(address='0.0.0.0', port=8080, debug=True)
